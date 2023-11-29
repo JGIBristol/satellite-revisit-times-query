@@ -24,6 +24,17 @@ file_path <- "./data/Accesses 1.cvaa"
 #--------------------------------------------
 
 
+radians_to_degrees <- function(radians, offset=F){
+    if (offset) {
+        radians[radians>pi] <- radians[radians>pi] - 2*pi
+       
+    }
+
+    return(radians * 180 / pi)
+}
+
+
+
 #' Get Details for Single Point
 #'
 #' This function extracts the details for a single point.
@@ -44,7 +55,10 @@ get_details_for_single_point <- function(point_number_index,full_file, all_point
     
     point_number <- gsub("PointNumber\t\t", "",full_file[current_point]) %>% trimws() %>% as.numeric()
     lat <- gsub("Lat\t\t", "",full_file[current_point + 1]) %>% trimws() %>% as.numeric()
+    lat <- radians_to_degrees(lat)
     lon <- gsub("Lon\t\t", "",full_file[current_point + 2]) %>% trimws() %>% as.numeric()
+    lon <- radians_to_degrees(lon, offset=T)
+
     alt <- gsub("Alt\t\t", "",full_file[current_point + 3]) %>% trimws() %>% as.numeric()
     num_accesses <- gsub("NumberOfAccesses\t\t", "",full_file[current_point + 4]) %>% trimws() %>% as.numeric()
 
